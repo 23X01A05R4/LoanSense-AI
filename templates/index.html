@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Loan Approval Prediction System | ML Project</title>
+  <meta name="description"
+        content="Predict your loan approval instantly using our AI-powered machine learning system. Fast, accurate, and free." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+</head>
+<body>
+
+  <!-- ── NAV ─────────────────────────────────────────────────────── -->
+  <nav class="navbar">
+    <div class="nav-brand">
+      <span class="nav-icon">🏦</span>
+      <span class="nav-title">LoanSense AI</span>
+    </div>
+    <ul class="nav-links">
+      <li><a href="{{ url_for('index') }}"  class="nav-link active">Predict</a></li>
+      <li><a href="{{ url_for('charts') }}" class="nav-link">Analytics</a></li>
+      <li><a href="{{ url_for('about') }}"  class="nav-link">About</a></li>
+    </ul>
+  </nav>
+
+  <!-- ── HERO ─────────────────────────────────────────────────────── -->
+  <section class="hero">
+    <div class="hero-content">
+      <div class="hero-badge">✨ AI-Powered Loan Analysis</div>
+      <h1 class="hero-title">Will Your Loan Get<br/><span class="gradient-text">Approved?</span></h1>
+      <p class="hero-subtitle">
+        Our <strong>{{ model_name }}</strong> model (accuracy&nbsp;<strong>{{ model_acc }}%</strong>)
+        analyses your financial profile in seconds and predicts loan approval with confidence scores.
+      </p>
+    </div>
+    <div class="hero-stats">
+      <div class="stat-card">
+        <span class="stat-num">{{ model_acc }}%</span>
+        <span class="stat-label">Accuracy</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-num">614+</span>
+        <span class="stat-label">Training Samples</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-num">11</span>
+        <span class="stat-label">Features Analysed</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── MAIN FORM ─────────────────────────────────────────────────── -->
+  <main class="main-content">
+
+    <!-- Error banner -->
+    {% if errors %}
+    <div class="alert alert-error" id="error-banner">
+      <span class="alert-icon">⚠️</span>
+      <div>
+        <strong>Please fix the following errors:</strong>
+        <ul class="error-list">
+          {% for e in errors %}<li>{{ e }}</li>{% endfor %}
+        </ul>
+      </div>
+    </div>
+    {% endif %}
+
+    <form id="loanForm" method="POST" action="{{ url_for('predict') }}" novalidate>
+
+      <!-- ── SECTION 1: Personal Info ───────────────────────────── -->
+      <div class="form-card">
+        <div class="card-header">
+          <span class="card-icon">👤</span>
+          <div>
+            <h2 class="card-title">Personal Information</h2>
+            <p class="card-subtitle">Tell us a bit about yourself</p>
+          </div>
+        </div>
+        <div class="form-grid">
+
+          <div class="form-group">
+            <label for="Gender" class="form-label">Gender <span class="req">*</span></label>
+            <select id="Gender" name="Gender" class="form-select" required>
+              <option value="">— Select —</option>
+              <option value="Male"   {% if form_data and form_data.get('Gender')=='Male'   %}selected{% endif %}>Male</option>
+              <option value="Female" {% if form_data and form_data.get('Gender')=='Female' %}selected{% endif %}>Female</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="Married" class="form-label">Marital Status <span class="req">*</span></label>
+            <select id="Married" name="Married" class="form-select" required>
+              <option value="">— Select —</option>
+              <option value="Yes" {% if form_data and form_data.get('Married')=='Yes' %}selected{% endif %}>Married</option>
+              <option value="No"  {% if form_data and form_data.get('Married')=='No'  %}selected{% endif %}>Single / Unmarried</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="Dependents" class="form-label">Dependents <span class="req">*</span></label>
+            <select id="Dependents" name="Dependents" class="form-select" required>
+              <option value="">— Select —</option>
+              {% for d in ['0','1','2','3+'] %}
+              <option value="{{ d }}"
+                {% if form_data and form_data.get('Dependents')==d %}selected{% endif %}>
+                {{ d }}
+              </option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="Education" class="form-label">Education <span class="req">*</span></label>
+            <select id="Education" name="Education" class="form-select" required>
+              <option value="">— Select —</option>
+              <option value="Graduate"     {% if form_data and form_data.get('Education')=='Graduate'     %}selected{% endif %}>Graduate</option>
+              <option value="Not Graduate" {% if form_data and form_data.get('Education')=='Not Graduate' %}selected{% endif %}>Not Graduate</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="Self_Employed" class="form-label">Self Employed <span class="req">*</span></label>
+            <select id="Self_Employed" name="Self_Employed" class="form-select" required>
+              <option value="">— Select —</option>
+              <option value="Yes" {% if form_data and form_data.get('Self_Employed')=='Yes' %}selected{% endif %}>Yes</option>
+              <option value="No"  {% if form_data and form_data.get('Self_Employed')=='No'  %}selected{% endif %}>No</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="Property_Area" class="form-label">Property Area <span class="req">*</span></label>
+            <select id="Property_Area" name="Property_Area" class="form-select" required>
+              <option value="">— Select —</option>
+              {% for area in ['Urban','Semiurban','Rural'] %}
+              <option value="{{ area }}"
+                {% if form_data and form_data.get('Property_Area')==area %}selected{% endif %}>
+                {{ area }}
+              </option>
+              {% endfor %}
+            </select>
+          </div>
+
+        </div><!-- /form-grid -->
+      </div><!-- /form-card -->
+
+      <!-- ── SECTION 2: Financial Info ──────────────────────────── -->
+      <div class="form-card">
+        <div class="card-header">
+          <span class="card-icon">💰</span>
+          <div>
+            <h2 class="card-title">Financial Details</h2>
+            <p class="card-subtitle">Provide accurate income and loan information</p>
+          </div>
+        </div>
+        <div class="form-grid">
+
+          <div class="form-group">
+            <label for="ApplicantIncome" class="form-label">
+              Applicant Income (₹/month) <span class="req">*</span>
+            </label>
+            <div class="input-wrapper">
+              <span class="input-prefix">₹</span>
+              <input id="ApplicantIncome" name="ApplicantIncome" type="number"
+                     class="form-input with-prefix"
+                     placeholder="e.g. 5000" min="0" max="81000" step="100"
+                     value="{{ form_data.get('ApplicantIncome','') if form_data else '' }}"
+                     required />
+            </div>
+            <span class="form-hint">Your monthly gross income</span>
+          </div>
+
+          <div class="form-group">
+            <label for="CoapplicantIncome" class="form-label">
+              Co-applicant Income (₹/month)
+            </label>
+            <div class="input-wrapper">
+              <span class="input-prefix">₹</span>
+              <input id="CoapplicantIncome" name="CoapplicantIncome" type="number"
+                     class="form-input with-prefix"
+                     placeholder="e.g. 0" min="0" max="41667" step="100"
+                     value="{{ form_data.get('CoapplicantIncome','0') if form_data else '0' }}" />
+            </div>
+            <span class="form-hint">Leave 0 if not applicable</span>
+          </div>
+
+          <div class="form-group">
+            <label for="LoanAmount" class="form-label">
+              Loan Amount (₹) <span class="req">*</span>
+            </label>
+            <div class="input-wrapper">
+              <span class="input-prefix">₹</span>
+              <input id="LoanAmount" name="LoanAmount" type="number"
+                     class="form-input with-prefix"
+                     placeholder="e.g. 150000" min="10000" max="999999" step="1"
+                     value="{{ form_data.get('LoanAmount','') if form_data else '' }}"
+                     required />
+            </div>
+            <span class="form-hint">Loan amount in rupees (₹10,000 – ₹9,99,999)</span>
+          </div>
+
+          <div class="form-group">
+            <label for="Loan_Amount_Term" class="form-label">
+              Loan Term (months) <span class="req">*</span>
+            </label>
+            <select id="Loan_Amount_Term" name="Loan_Amount_Term" class="form-select" required>
+              <option value="">— Select —</option>
+              {% for term in [12, 36, 60, 84, 120, 180, 240, 300, 360, 480] %}
+              <option value="{{ term }}"
+                {% if form_data and form_data.get('Loan_Amount_Term')|string == term|string %}selected{% endif %}>
+                {{ term }} months {% if term == 360 %}(recommended){% endif %}
+              </option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <div class="form-group full-width">
+            <label class="form-label">Credit History <span class="req">*</span></label>
+            <div class="radio-group">
+              <label class="radio-card {% if form_data and form_data.get('Credit_History')=='1' %}selected{% endif %}"
+                     id="credit-yes-card">
+                <input type="radio" name="Credit_History" value="1"
+                       {% if form_data and form_data.get('Credit_History')=='1' %}checked{% endif %}
+                       required />
+                <span class="radio-icon">✅</span>
+                <span class="radio-label">Good Credit History</span>
+                <span class="radio-desc">All past loans repaid on time</span>
+              </label>
+              <label class="radio-card {% if form_data and form_data.get('Credit_History')=='0' %}selected{% endif %}"
+                     id="credit-no-card">
+                <input type="radio" name="Credit_History" value="0"
+                       {% if form_data and form_data.get('Credit_History')=='0' %}checked{% endif %} />
+                <span class="radio-icon">❌</span>
+                <span class="radio-label">Poor / No Credit History</span>
+                <span class="radio-desc">Missed payments or no credit record</span>
+              </label>
+            </div>
+          </div>
+
+        </div><!-- /form-grid -->
+      </div><!-- /form-card -->
+
+      <!-- ── SUBMIT ──────────────────────────────────────────────── -->
+      <div class="submit-section">
+        <button type="submit" class="btn-predict" id="submitBtn">
+          <span class="btn-icon">🔍</span>
+          <span class="btn-text">Predict Loan Approval</span>
+          <span class="btn-loader" id="btnLoader" style="display:none">⏳ Analysing…</span>
+        </button>
+        <p class="submit-note">
+          ℹ️  Your data is processed locally — never stored or shared.
+        </p>
+      </div>
+
+    </form>
+  </main>
+
+  <!-- ── FOOTER ────────────────────────────────────────────────────── -->
+  <footer class="footer">
+    <p>
+      Built with ❤️ using <strong>Python · Flask · Scikit-learn</strong> |
+      ML Portfolio Project &nbsp;|&nbsp;
+      <a href="{{ url_for('charts') }}">View Analytics →</a>
+    </p>
+  </footer>
+
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

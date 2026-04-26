@@ -1,0 +1,24 @@
+# Python cache
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Virtual environment
+venv/
+env/
+.env
+
+# Generated files (will be created at startup on server)
+loan_data.csv
+model.pkl
+
+# Chart images (generated at runtime)
+static/charts/*.png
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db

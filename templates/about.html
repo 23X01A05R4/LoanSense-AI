@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>About | LoanSense AI</title>
+  <meta name="description" content="About the Loan Approval Prediction System — technologies used and how it works." />
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet"/>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"/>
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="nav-brand">
+      <span class="nav-icon">🏦</span>
+      <span class="nav-title">LoanSense AI</span>
+    </div>
+    <ul class="nav-links">
+      <li><a href="{{ url_for('index') }}"  class="nav-link">Predict</a></li>
+      <li><a href="{{ url_for('charts') }}" class="nav-link">Analytics</a></li>
+      <li><a href="{{ url_for('about') }}"  class="nav-link active">About</a></li>
+    </ul>
+  </nav>
+
+  <section class="page-hero">
+    <h1 class="page-hero-title">About This Project</h1>
+    <p class="page-hero-sub">
+      A complete end-to-end Machine Learning project — from raw data to a deployed web app.
+    </p>
+  </section>
+
+  <main class="about-main">
+
+    <!-- Overview -->
+    <div class="about-card">
+      <h2 class="about-section-title">🎯 Project Overview</h2>
+      <p>
+        <strong>LoanSense AI</strong> is a Loan Approval Prediction System built as a machine learning
+        portfolio project. It predicts whether a bank loan application will be approved or rejected based
+        on applicant data such as income, credit history, loan amount, and demographic details.
+      </p>
+      <p>
+        The system uses a trained <strong>{{ model_name }}</strong> model with an accuracy of
+        <strong>{{ model_acc }}%</strong> on the test set.
+      </p>
+    </div>
+
+    <!-- Tech Stack -->
+    <div class="about-card">
+      <h2 class="about-section-title">⚙️ Technologies Used</h2>
+      <div class="tech-grid">
+        <div class="tech-item">
+          <span class="tech-icon">🐍</span>
+          <span class="tech-name">Python 3.x</span>
+          <span class="tech-desc">Core language</span>
+        </div>
+        <div class="tech-item">
+          <span class="tech-icon">🌐</span>
+          <span class="tech-name">Flask</span>
+          <span class="tech-desc">Web framework</span>
+        </div>
+        <div class="tech-item">
+          <span class="tech-icon">🤖</span>
+          <span class="tech-name">Scikit-learn</span>
+          <span class="tech-desc">ML library</span>
+        </div>
+        <div class="tech-item">
+          <span class="tech-icon">🐼</span>
+          <span class="tech-name">Pandas</span>
+          <span class="tech-desc">Data manipulation</span>
+        </div>
+        <div class="tech-item">
+          <span class="tech-icon">🔢</span>
+          <span class="tech-name">NumPy</span>
+          <span class="tech-desc">Numerical computing</span>
+        </div>
+        <div class="tech-item">
+          <span class="tech-icon">📊</span>
+          <span class="tech-name">Matplotlib / Seaborn</span>
+          <span class="tech-desc">Data visualisation</span>
+        </div>
+        <div class="tech-item">
+          <span class="tech-icon">🎨</span>
+          <span class="tech-name">HTML / CSS / JS</span>
+          <span class="tech-desc">Frontend</span>
+        </div>
+        <div class="tech-item">
+          <span class="tech-icon">💾</span>
+          <span class="tech-name">Pickle</span>
+          <span class="tech-desc">Model serialisation</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ML Pipeline -->
+    <div class="about-card">
+      <h2 class="about-section-title">🔄 ML Pipeline</h2>
+      <div class="pipeline">
+        <div class="pipeline-step">
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <strong>Data Collection</strong>
+            <p>614-row Loan Prediction dataset with 11 features (mirrors Kaggle dataset).</p>
+          </div>
+        </div>
+        <div class="pipeline-step">
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <strong>Preprocessing</strong>
+            <p>Handle missing values (mode/median fill), label encoding, standard scaling.</p>
+          </div>
+        </div>
+        <div class="pipeline-step">
+          <div class="step-num">3</div>
+          <div class="step-content">
+            <strong>Model Training</strong>
+            <p>Two models trained: Logistic Regression and Random Forest (80/20 split).</p>
+          </div>
+        </div>
+        <div class="pipeline-step">
+          <div class="step-num">4</div>
+          <div class="step-content">
+            <strong>Evaluation</strong>
+            <p>Accuracy, confusion matrix, precision/recall, and 5-fold cross-validation.</p>
+          </div>
+        </div>
+        <div class="pipeline-step">
+          <div class="step-num">5</div>
+          <div class="step-content">
+            <strong>Deployment</strong>
+            <p>Best model saved as model.pkl and served via Flask REST API.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Features -->
+    <div class="about-card">
+      <h2 class="about-section-title">📋 Dataset Features</h2>
+      <div class="features-table-wrap">
+        <table class="features-table">
+          <thead>
+            <tr>
+              <th>Feature</th>
+              <th>Type</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Gender</td><td>Categorical</td><td>Male / Female</td></tr>
+            <tr><td>Married</td><td>Categorical</td><td>Yes / No</td></tr>
+            <tr><td>Dependents</td><td>Categorical</td><td>0 / 1 / 2 / 3+</td></tr>
+            <tr><td>Education</td><td>Categorical</td><td>Graduate / Not Graduate</td></tr>
+            <tr><td>Self_Employed</td><td>Categorical</td><td>Yes / No</td></tr>
+            <tr><td>ApplicantIncome</td><td>Numerical</td><td>Monthly income of applicant (₹)</td></tr>
+            <tr><td>CoapplicantIncome</td><td>Numerical</td><td>Monthly income of co-applicant (₹)</td></tr>
+            <tr><td>LoanAmount</td><td>Numerical</td><td>Loan amount in thousands (₹K)</td></tr>
+            <tr><td>Loan_Amount_Term</td><td>Numerical</td><td>Loan duration in months</td></tr>
+            <tr><td>Credit_History</td><td>Binary</td><td>1 = good, 0 = poor/none</td></tr>
+            <tr><td>Property_Area</td><td>Categorical</td><td>Urban / Semiurban / Rural</td></tr>
+            <tr><td><strong>Loan_Status</strong></td><td>Target</td><td>Y = Approved, N = Not Approved</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- How to run -->
+    <div class="about-card">
+      <h2 class="about-section-title">🚀 How to Run</h2>
+      <div class="code-block">
+        <pre><code># 1. Install dependencies
+pip install -r requirements.txt
+
+# 2. Generate the dataset
+python generate_dataset.py
+
+# 3. Train the model
+python train_model.py
+
+# 4. Start the web app
+python app.py
+
+# 5. Open in browser
+http://127.0.0.1:5000</code></pre>
+      </div>
+    </div>
+
+    <div class="about-cta">
+      <a href="{{ url_for('index') }}" class="btn-predict" id="predictNowBtn">
+        🔍 Try the Prediction
+      </a>
+      <a href="{{ url_for('charts') }}" class="btn-secondary" id="viewChartsBtnAbout">
+        📊 View Analytics
+      </a>
+    </div>
+
+  </main>
+
+  <footer class="footer">
+    <p>Built with ❤️ using <strong>Python · Flask · Scikit-learn</strong> | ML Portfolio Project</p>
+  </footer>
+
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

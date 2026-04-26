@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Analytics Dashboard | LoanSense AI</title>
+  <meta name="description" content="Visual analytics and insights from the Loan Approval Prediction ML model." />
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet"/>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"/>
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="nav-brand">
+      <span class="nav-icon">🏦</span>
+      <span class="nav-title">LoanSense AI</span>
+    </div>
+    <ul class="nav-links">
+      <li><a href="{{ url_for('index') }}"  class="nav-link">Predict</a></li>
+      <li><a href="{{ url_for('charts') }}" class="nav-link active">Analytics</a></li>
+      <li><a href="{{ url_for('about') }}"  class="nav-link">About</a></li>
+    </ul>
+  </nav>
+
+  <section class="page-hero">
+    <h1 class="page-hero-title">📊 Analytics Dashboard</h1>
+    <p class="page-hero-sub">
+      Insights from our ML pipeline — data distribution, model performance, and feature importance.
+    </p>
+    <div class="hero-stats">
+      <div class="stat-card">
+        <span class="stat-num">{{ model_acc }}%</span>
+        <span class="stat-label">Model Accuracy</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-num">{{ model_name }}</span>
+        <span class="stat-label">Best Model</span>
+      </div>
+    </div>
+  </section>
+
+  <main class="charts-main">
+
+    {% if charts %}
+      <div class="charts-grid">
+
+        {% set labels = {
+          'loan_status_dist' : '📊 Loan Status Distribution',
+          'model_comparison'  : '🏆 Model Accuracy Comparison',
+          'confusion_matrix'  : '🔢 Confusion Matrix',
+          'feature_importance': '⭐ Feature Importances',
+          'income_dist'       : '💵 Applicant Income Distribution'
+        } %}
+
+        {% for key, title in charts.items() %}
+        <div class="chart-card">
+          <h3 class="chart-title">{{ labels.get(key, title) }}</h3>
+          <div class="chart-img-wrap">
+            <img src="{{ url_for('static', filename='charts/' + key + '.png') }}"
+                 alt="{{ title }}"
+                 class="chart-img"
+                 loading="lazy" />
+          </div>
+        </div>
+        {% endfor %}
+
+      </div>
+    {% else %}
+      <div class="empty-state">
+        <div class="empty-icon">📉</div>
+        <h2>No Charts Available</h2>
+        <p>Run <code>python train_model.py</code> to generate the analytics charts.</p>
+        <a href="{{ url_for('index') }}" class="btn-secondary">Go to Prediction</a>
+      </div>
+    {% endif %}
+
+  </main>
+
+  <footer class="footer">
+    <p>Built with ❤️ using <strong>Python · Flask · Scikit-learn · Matplotlib</strong></p>
+  </footer>
+
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
