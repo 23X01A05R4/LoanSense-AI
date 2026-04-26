@@ -1,5 +1,9 @@
 # 🏦 Loan Approval Prediction System
 
+[![🚀 Live Demo](https://img.shields.io/badge/🚀_Live_Demo-loansense--ai-6c63ff?style=for-the-badge)](https://loansense-ai-gqm8.onrender.com/)
+
+> **🌐 Live App:** [https://loansense-ai-gqm8.onrender.com/](https://loansense-ai-gqm8.onrender.com/)
+
 > An end-to-end Machine Learning project that predicts bank loan approval using Python, Flask, and Scikit-learn — complete with a professional dark-mode web UI, analytics dashboard, and confidence scoring.
 
 ---
